@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Sample Project Server</string>
+    <string name="url_server">http://expertdevelopers.ir/api/v1/experts/student</string>
+    <string name="main_addStudent">Add Student</string>
+</resources>
