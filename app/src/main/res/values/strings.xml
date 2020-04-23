@@ -2,4 +2,9 @@
     <string name="app_name">Sample Project Server</string>
     <string name="url_server">http://expertdevelopers.ir/api/v1/experts/student</string>
     <string name="main_addStudent">Add Student</string>
+    <string name="fab_save">Save</string>
+    <string name="hint_first_name">First Name</string>
+    <string name="hint_last_name">Last Name</string>
+    <string name="hint_course">Course</string>
+    <string name="hint_score">Score</string>
 </resources>
