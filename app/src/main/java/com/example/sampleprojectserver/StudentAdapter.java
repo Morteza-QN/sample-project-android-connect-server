@@ -14,7 +14,12 @@ import java.util.List;
 public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.StudentViewHolder> {
     private List<StudentObject> studentObjects;
 
-    public StudentAdapter(List<StudentObject> studentObjects) {this.studentObjects = studentObjects;}
+    public StudentAdapter(List<StudentObject> studentObjects) { this.studentObjects = studentObjects; }
+
+    public void addStudent(StudentObject object) {
+        studentObjects.add(0, object);
+        notifyItemInserted(0);
+    }
 
     @NonNull
     @Override

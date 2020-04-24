@@ -1,10 +1,12 @@
 package com.example.sampleprojectserver;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -25,8 +27,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    private static final String TAG = "MainActivity";
-    RecyclerView recyclerView;
+    private static final String TAG                    = "MainActivity";
+    private static final int    ADD_STUDENT_REQUEST_ID = 122;
+    RecyclerView   recyclerView;
+    StudentAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +47,8 @@ public class MainActivity extends AppCompatActivity {
         fabAddNewStudentBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, AddNewStudentFormActivity.class));
+                startActivityForResult(new Intent(MainActivity.this, AddNewStudentFormActivity.class),
+                                       ADD_STUDENT_REQUEST_ID);
             }
         });
 
@@ -69,7 +74,9 @@ public class MainActivity extends AppCompatActivity {
                                 Student.setCourse(studentJsonObject.getString("course"));
                                 Student.setScore(studentJsonObject.getInt("score"));
                                 students.add(Student);
-                                recyclerView.setAdapter(new StudentAdapter(students));
+
+                                adapter = new StudentAdapter(students);
+                                recyclerView.setAdapter(adapter);
                             }
                             Log.i(TAG, "onResponse: students size = " + students.size());
                         }
@@ -86,5 +93,20 @@ public class MainActivity extends AppCompatActivity {
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(request);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == ADD_STUDENT_REQUEST_ID && resultCode == Activity.RESULT_OK) {
+            if (data != null) {
+                if (adapter != null) {
+                    StudentObject object = data.getParcelableExtra("student");
+                    adapter.addStudent(object);
+                    recyclerView.smoothScrollToPosition(0);
+                }
+            }
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }
