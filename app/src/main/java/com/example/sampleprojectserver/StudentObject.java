@@ -3,15 +3,17 @@ package com.example.sampleprojectserver;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
 import org.jetbrains.annotations.NotNull;
 
 public class StudentObject implements Parcelable {
 
-    private int    id;
-    private String firstName;
-    private String lastName;
-    private String course;
-    private int    score;
+    private                               int    id;
+    @SerializedName("first_name") private String firstName;
+    @SerializedName("last_name") private  String lastName;
+    private                               String course;
+    private                               int    score;
 
     public static final Parcelable.Creator<StudentObject> CREATOR = new Parcelable.Creator<StudentObject>() {
         @Override
