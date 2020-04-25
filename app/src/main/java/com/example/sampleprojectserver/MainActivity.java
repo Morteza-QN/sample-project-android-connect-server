@@ -27,15 +27,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    private static final String TAG                    = "MainActivity";
-    private static final int    ADD_STUDENT_REQUEST_ID = 122;
-    RecyclerView   recyclerView;
-    StudentAdapter adapter;
+    public static final  String         EXTRA_KEY_INTENT_ADD_STUDENT = "student";
+    private static final String         TAG                          = "MainActivity";
+    private static final int            ADD_STUDENT_REQUEST_ID       = 122;
+    private              RecyclerView   recyclerView;
+    private              StudentAdapter adapter;
+    private              ApiService     apiService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        apiService = new ApiService(this, TAG);
 
         Toolbar toolbar = findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
@@ -47,12 +51,29 @@ public class MainActivity extends AppCompatActivity {
         fabAddNewStudentBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.i(TAG, "onClick: fab add new student");
                 startActivityForResult(new Intent(MainActivity.this, AddNewStudentFormActivity.class),
-                                       ADD_STUDENT_REQUEST_ID);
+                        ADD_STUDENT_REQUEST_ID);
             }
         });
+        apiService.getStudent(new ApiService.StudentListCallback() {
+            @Override
+            public void onSuccess(List<StudentObject> studentObjectList) {
+                adapter = new StudentAdapter(studentObjectList);
+                recyclerView.setAdapter(adapter);
+            }
 
-        getRequestServer();
+            @Override
+            public void onError(VolleyError error) {
+                Log.i(TAG, "onError: get student");
+            }
+        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        apiService.cancel();
     }
 
     private void getRequestServer() {
@@ -90,7 +111,6 @@ public class MainActivity extends AppCompatActivity {
                         Log.i(TAG, "onErrorResponse:\n " + error.toString());
                     }
                 });
-
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(request);
     }
@@ -98,15 +118,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == ADD_STUDENT_REQUEST_ID && resultCode == Activity.RESULT_OK) {
-            if (data != null) {
-                if (adapter != null) {
-                    StudentObject object = data.getParcelableExtra("student");
-                    adapter.addStudent(object);
-                    recyclerView.smoothScrollToPosition(0);
-                }
+            if (data != null && adapter != null) {
+                StudentObject object = data.getParcelableExtra(EXTRA_KEY_INTENT_ADD_STUDENT);
+                adapter.addStudent(object);
+                recyclerView.smoothScrollToPosition(0);
             }
         }
-
         super.onActivityResult(requestCode, resultCode, data);
     }
 }
