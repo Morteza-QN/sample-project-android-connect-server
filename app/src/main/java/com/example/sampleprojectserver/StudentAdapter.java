@@ -9,6 +9,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.StudentViewHolder> {
@@ -51,7 +53,7 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.StudentV
         }
 
         @SuppressLint("SetTextI18n")
-        void bind(StudentObject object) {
+        void bind(@NotNull StudentObject object) {
             fullNameTv.setText(object.getFirstName() + " " + object.getLastName());
             courseTitleTv.setText(object.getCourse());
             scoreTv.setText(String.valueOf(object.getScore()));

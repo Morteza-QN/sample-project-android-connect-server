@@ -3,6 +3,8 @@ package com.example.sampleprojectserver;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import org.jetbrains.annotations.NotNull;
+
 public class StudentObject implements Parcelable {
 
     private int    id;
@@ -21,7 +23,7 @@ public class StudentObject implements Parcelable {
 
     public StudentObject() {}
 
-    protected StudentObject(Parcel in) {
+    protected StudentObject(@NotNull Parcel in) {
         this.id        = in.readInt();
         this.firstName = in.readString();
         this.lastName  = in.readString();
@@ -53,7 +55,7 @@ public class StudentObject implements Parcelable {
     public int describeContents() { return 0; }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
+    public void writeToParcel(@NotNull Parcel dest, int flags) {
         dest.writeInt(this.id);
         dest.writeString(this.firstName);
         dest.writeString(this.lastName);

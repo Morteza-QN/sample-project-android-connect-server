@@ -17,9 +17,9 @@ import com.google.android.material.textfield.TextInputEditText;
 import org.jetbrains.annotations.NotNull;
 
 public class AddNewStudentFormActivity extends AppCompatActivity {
-    private static final String TAG = "AddStudentFormActivity";
-    TextInputEditText firstNameEt, lastNameEt, courseEt, scoreEt;
-    View fabSaveBtn;
+    private static final String            TAG = "AddStudentFormActivity";
+    private              TextInputEditText firstNameEt, lastNameEt, courseEt, scoreEt;
+    private View       fabSaveBtn;
     private ApiService apiService;
 
     @Override
