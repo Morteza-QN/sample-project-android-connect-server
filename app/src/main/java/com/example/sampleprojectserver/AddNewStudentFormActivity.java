@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.android.volley.VolleyError;
 import com.google.android.material.textfield.TextInputEditText;
 
 import org.jetbrains.annotations.NotNull;
@@ -27,7 +26,7 @@ public class AddNewStudentFormActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_student_form);
 
-        apiService = new ApiService(this, TAG);
+        apiService = new ApiService();
 
         Toolbar toolbar = findViewById(R.id.toolbar_addNewStudent);
         setSupportActionBar(toolbar);
@@ -42,12 +41,9 @@ public class AddNewStudentFormActivity extends AppCompatActivity {
         courseEt    = findViewById(R.id.et_addNewStudent_course);
         fabSaveBtn  = findViewById(R.id.fab_addNewStudent_save);
 
-        fabSaveBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.i(TAG, "onClick: fab save");
-                sendRequestServer();
-            }
+        fabSaveBtn.setOnClickListener(v -> {
+            Log.i(TAG, "onClick: fab save");
+            sendRequestServer();
         });
     }
 
@@ -71,7 +67,7 @@ public class AddNewStudentFormActivity extends AppCompatActivity {
                         }
 
                         @Override
-                        public void onError(VolleyError error) {
+                        public void onError(Exception error) {
                             Log.i(TAG, "onError: add student" + error);
                         }
                     });
