@@ -8,7 +8,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -85,35 +84,13 @@ public class ApiService {
     }
 
     public void getStudent(final StudentListCallback listCallback) {
-        StringRequest request = new StringRequest(Request.Method.GET, URL_SERVER_API, new Response.Listener<String>() {
+    /*    StringRequest request = new StringRequest(Request.Method.GET, URL_SERVER_API, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Log.i(TAG, "onResponse:\n " + response.toString());
 
                 List<StudentObject> students = gson.fromJson(response, new TypeToken<List<StudentObject>>() {}.getType());
                 listCallback.onSuccess(students);
-                //                gson.toJson(students.get(0));
-             /*   List<StudentObject> students = new ArrayList<>();
-                try {
-                    JSONArray jsonArray = new JSONArray(response);
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        StudentObject Student           = new StudentObject();
-                        JSONObject    studentJsonObject = jsonArray.getJSONObject(i);
-                        Student.setId(studentJsonObject.getInt("id"));
-                        Student.setFirstName(studentJsonObject.getString("first_name"));
-                        Student.setLastName(studentJsonObject.getString("last_name"));
-                        Student.setCourse(studentJsonObject.getString("course"));
-                        Student.setScore(studentJsonObject.getInt("score"));
-                        students.add(Student);
-
-                    }
-                    Log.i(TAG, "onResponse: students size = " + students.size());
-                    listCallback.onSuccess(students);
-                }
-                catch (JSONException e) {
-                    e.printStackTrace();
-                }*/
-
             }
         }, new Response.ErrorListener() {
             @Override
@@ -121,7 +98,23 @@ public class ApiService {
                 Log.i(TAG, "onErrorResponse:\n " + error.toString());
                 listCallback.onError(error);
             }
-        });
+        });*/
+        GsonRequest<List<StudentObject>> request =
+                new GsonRequest<>(Request.Method.GET, new TypeToken<List<StudentObject>>() {}.getType(), URL_SERVER_API,
+                        new Response.Listener<List<StudentObject>>() {
+                            @Override
+                            public void onResponse(List<StudentObject> response) {
+                                //type of response is TypeToken
+                                Log.i(TAG, "onResponse: get gsonRequest");
+                                listCallback.onSuccess(response);
+                            }
+                        }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.i(TAG, "onErrorResponse: get gsonRequest");
+                        listCallback.onError(error);
+                    }
+                });
         request.setTag(requestTag);
         requestQueue.add(request);
     }

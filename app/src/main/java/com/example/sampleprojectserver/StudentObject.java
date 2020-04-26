@@ -9,12 +9,6 @@ import org.jetbrains.annotations.NotNull;
 
 public class StudentObject implements Parcelable {
 
-    private                               int    id;
-    @SerializedName("first_name") private String firstName;
-    @SerializedName("last_name") private  String lastName;
-    private                               String course;
-    private                               int    score;
-
     public static final Parcelable.Creator<StudentObject> CREATOR = new Parcelable.Creator<StudentObject>() {
         @Override
         public StudentObject createFromParcel(Parcel source) {return new StudentObject(source);}
@@ -22,6 +16,14 @@ public class StudentObject implements Parcelable {
         @Override
         public StudentObject[] newArray(int size) {return new StudentObject[size];}
     };
+
+    private int    id;
+    @SerializedName("first_name")
+    private String firstName;
+    @SerializedName("last_name")
+    private String lastName;
+    private String course;
+    private int    score;
 
     public StudentObject() {}
 
